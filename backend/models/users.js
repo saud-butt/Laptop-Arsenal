@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const autoPopulate = require("mongoose-autopopulate");
 
 // Create Schema
 const UserSchema = new Schema({
@@ -15,10 +16,17 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+  avatar: {
+    type: String
+  },
   date: {
     type: Date,
     default: Date.now
-  }
+  },
+  wishlist: [
+    { type: Schema.Types.ObjectId, ref: "products", autopopulate: true }
+  ]
 });
 
+UserSchema.plugin(autoPopulate);
 module.exports = User = mongoose.model("users", UserSchema);

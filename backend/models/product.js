@@ -1,10 +1,13 @@
 const mongoose = require("mongoose");
-const mongoosePaginate = require("mongoose-paginate-v2");
-
 const Schema = mongoose.Schema;
+const mongoosePaginate = require("mongoose-paginate-v2");
+const aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 
 const productSchema = new Schema({
   category: {
+    type: String
+  },
+  cover: {
     type: String
   },
   brand: {
@@ -17,7 +20,7 @@ const productSchema = new Schema({
   name: {
     type: String
   },
-  dimension: {
+  dimensions: {
     height: { type: String },
     width: { type: String },
     depth: { type: String }
@@ -110,4 +113,11 @@ const productSchema = new Schema({
 });
 
 productSchema.plugin(mongoosePaginate);
+
+productSchema.index({
+  name: "text"
+});
+
+productSchema.plugin(aggregatePaginate);
+
 module.exports = Product = mongoose.model("products", productSchema);
