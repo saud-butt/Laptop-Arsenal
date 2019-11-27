@@ -7,7 +7,7 @@ const ReviewController = require("../../controllers/review_controller");
 // @route   GET api/reviews
 // @desc    Get all reviews
 // @access  Public
-router.get("/", ReviewController.getAllReviews);
+router.get("", ReviewController.getAllReviews);
 
 // @route   GET api/reviews/:user_id
 // @desc    Get review by user_id
@@ -17,7 +17,7 @@ router.get("/user/:id", ReviewController.getReviewByUserId);
 // @route   GET api/reviews/:product_id
 // @desc    Get review by product_id
 // @access  Public
-router.get("/product/:id", ReviewController.getReviewByProductId);
+router.get("/model/:id", ReviewController.getReviewByProductId);
 
 // @route   Post api/reviews
 // @desc    Create review

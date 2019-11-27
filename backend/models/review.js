@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const mongoosePaginate = require("mongoose-paginate-v2");
+const aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 
 // Create Schema
-const ReviewSchema = new Schema({
+const reviewSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: "users"
@@ -15,10 +17,16 @@ const ReviewSchema = new Schema({
     type: String,
     required: true
   },
-  name: {
+  author: {
     type: String
   },
   avatar: {
+    type: String
+  },
+  cover: {
+    type: String
+  },
+  model: {
     type: String
   },
   likes: [
@@ -57,4 +65,12 @@ const ReviewSchema = new Schema({
   }
 });
 
-module.exports = Review = mongoose.model("review", ReviewSchema);
+reviewSchema.plugin(mongoosePaginate);
+
+reviewSchema.index({
+  name: "Review text"
+});
+
+reviewSchema.plugin(aggregatePaginate);
+
+module.exports = Review = mongoose.model("review", reviewSchema);

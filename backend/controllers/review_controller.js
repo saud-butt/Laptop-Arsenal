@@ -1,21 +1,38 @@
 const Review = require("../models/review");
 const User = require("../models/users");
-const Product = require("../models/product");
 
 // Validation
 const validateReviewInput = require("../validation/review");
 
 // Get all Reviews
-exports.getAllReviews = (req, res) => {
-  Review.find()
-    .sort({ date: -1 })
-    .then(reviews => res.json(reviews))
-    .catch(err => res.status(404).json({ noreviewsfound: "No review found" }));
+exports.getAllReviews = (req, res, next) => {
+  const errors = {};
+  const page = req.query.page;
+  const limit = req.query.limit;
+  const options = {
+    page: page,
+    limit: limit
+  };
+
+  Review.paginate({}, options, function(err, reviews) {
+    if (!reviews) {
+      errors.noreview = "There are no reviews";
+      return res.status(404).json(errors);
+    }
+    res.json(res.json(reviews));
+  }).catch(err =>
+    res.status(404).json({ noreviewsfound: "No review found end" })
+  );
+
+  // Review.find()
+  //   .sort({ date: -1 })
+  //   .then(reviews => res.json(reviews))
+  //   .catch(err => res.status(404).json({ noreviewsfound: "No review found" }));
 };
 
 // Get Review by UserId
 exports.getReviewByUserId = (req, res) => {
-  Review.findOne({ user: req.params.id })
+  Review.find({ user: req.params.id })
     .then(review => res.json(review))
     .catch(err =>
       res.status(404).json({ noreviewfound: "No review found for this user" })
@@ -24,7 +41,7 @@ exports.getReviewByUserId = (req, res) => {
 
 // Get Review by ProductId
 exports.getReviewByProductId = (req, res) => {
-  Review.findOne({ product: req.params.id })
+  Review.find({ product: req.params.id })
     .then(review => res.json(review))
     .catch(err =>
       res
@@ -45,10 +62,12 @@ exports.createReview = (req, res) => {
 
   const newReview = new Review({
     text: req.body.text,
-    name: req.body.name,
+    author: req.body.author,
     avatar: req.body.avatar,
     user: req.user.id,
-    product: req.body.id
+    product: req.body.id,
+    model: req.body.model,
+    cover: req.body.cover
   });
 
   newReview.save().then(Review => res.json(Review));
