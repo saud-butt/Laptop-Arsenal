@@ -12,11 +12,11 @@ router.get("", ProductsController.getAllProducts);
 router.get("/:productId", ProductsController.getProductsById);
 
 // Get product by brand
-// GET /api/products/:productBrand
+// GET /api/products/related/:productBrand
 router.get("/brand/:brand", ProductsController.getRelatedProduct);
 
 // Get product by name
-// GET /api/products/:productName
+// GET /api/products/name/:productName
 router.get("/name/:name", ProductsController.getProductByName);
 
 // Filter Products

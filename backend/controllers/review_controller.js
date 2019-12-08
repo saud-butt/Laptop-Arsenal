@@ -30,7 +30,16 @@ exports.getAllReviews = (req, res, next) => {
   //   .catch(err => res.status(404).json({ noreviewsfound: "No review found" }));
 };
 
-// Get Review by UserId
+// Get Review by Id
+exports.getReview = (req, res) => {
+  Review.findById(req.params.id)
+    .then(review => res.json(review))
+    .catch(err =>
+      res.status(404).json({ noreviewfound: "No review found with that ID" })
+    );
+};
+
+// Get Reviews by UserId
 exports.getReviewByUserId = (req, res) => {
   Review.find({ user: req.params.id })
     .then(review => res.json(review))

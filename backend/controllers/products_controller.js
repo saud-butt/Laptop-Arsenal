@@ -36,11 +36,13 @@ exports.getProductsById = (req, res, next) => {
 
 exports.getRelatedProduct = (req, res, next) => {
   const errors = {};
+  const page = req.query.page;
+  const limit = req.query.limit;
   Product.paginate(
     { brand: req.params.brand },
     {
-      page: 1,
-      limit: 8
+      page: page,
+      limit: limit
     }
   )
     .then(products => {

@@ -11,9 +11,37 @@ const pricesSchema = new Schema({
         type: Number
       }
     }
+  ],
+  graphics: [
+    {
+      label: {
+        type: String
+      },
+      value: {
+        type: Number
+      }
+    }
+  ],
+  memory: [
+    {
+      label: {
+        type: String
+      },
+      value: {
+        type: Number
+      }
+    }
+  ],
+  storage: [
+    {
+      label: {
+        type: String
+      },
+      value: {
+        type: Number
+      }
+    }
   ]
 });
 
-pricesSchema.plugin(mongoosePaginate);
-
-module.exports = Prices = mongoose.model("pricess", pricesSchema);
+module.exports = Prices = mongoose.model("prices", pricesSchema);

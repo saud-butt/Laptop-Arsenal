@@ -9,6 +9,11 @@ const ReviewController = require("../../controllers/review_controller");
 // @access  Public
 router.get("", ReviewController.getAllReviews);
 
+// @route   GET api/reviews/:id
+// @desc    Get review by id
+// @access  Public
+router.get("/:id", ReviewController.getReview);
+
 // @route   GET api/reviews/:user_id
 // @desc    Get review by user_id
 // @access  Public

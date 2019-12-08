@@ -7,6 +7,7 @@ const User = require("../models/users");
 const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
 
+// Register a user
 exports.registerUser = (req, res, next) => {
   const { errors, isValid } = validateRegisterInput(req.body);
 
@@ -47,6 +48,7 @@ exports.registerUser = (req, res, next) => {
   });
 };
 
+// Login a user
 exports.loginUser = (req, res, next) => {
   const { errors, isValid } = validateLoginInput(req.body);
 
@@ -92,6 +94,7 @@ exports.loginUser = (req, res, next) => {
   });
 };
 
+// Get current user
 exports.getCurrentUser = (req, res, next) => {
   res.json({
     id: req.user.id,
@@ -100,6 +103,7 @@ exports.getCurrentUser = (req, res, next) => {
   });
 };
 
+// Add item to wishlist
 exports.addToWishlist = (req, res, next) => {
   User.findOne({ _id: req.user.id })
     .then(user => {
@@ -111,6 +115,7 @@ exports.addToWishlist = (req, res, next) => {
     .catch(err => res.status(404).json(err));
 };
 
+// Get wishlist
 exports.getWishlist = (req, res, next) => {
   User.findOne({ _id: req.user.id })
     .then(
@@ -121,12 +126,30 @@ exports.getWishlist = (req, res, next) => {
     .catch(err => res.status(500).json({ err }));
 };
 
+// Delete an item from wishlist
 exports.removeFromWishlist = (req, res, next) => {
-  User.findOne({ _id: req.user.id })
+  User.findById(req.user.id)
     .then(user => {
-      //Remove from wishlist
-      user.wishlist = user.wishlist.filter(item => `${item}` !== req.params.id);
-      user.save().then(updatedUser => res.json(updatedUser));
+      // Check to see if wishlist exists
+      if (
+        user.wishlist.filter(
+          wishlist => wishlist._id.toString() === req.params.id
+        ).length === 0
+      ) {
+        return res
+          .status(404)
+          .json({ wishlistitemnotexists: "Item does not exist" });
+      }
+
+      // Get remove index
+      const removeIndex = user.wishlist
+        .map(item => item._id.toString())
+        .indexOf(req.params.id);
+
+      // Splice comment out of array
+      user.wishlist.splice(removeIndex, 1);
+
+      user.save().then(res.json(user.wishlist));
     })
-    .catch(err => res.status(404).json(err));
+    .catch(err => res.status(404).json({ usernotfound: "No user found" }));
 };
