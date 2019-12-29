@@ -13,6 +13,21 @@ router.post("/price", PricesController.prices);
 // @access  Public
 router.post("/processors", PricesController.postProcessorsPrices);
 
+// @route   Post api/prices/graphics
+// @desc    Post prices of graphics
+// @access  Public
+router.post("/graphics", PricesController.postGraphicsPrices);
+
+// @route   Post api/prices/memory
+// @desc    Post prices of memory
+// @access  Public
+router.post("/memory", PricesController.postMemoryPrices);
+
+// @route   Post api/prices/memory
+// @desc    Post prices of memory
+// @access  Public
+router.post("/storage", PricesController.postStoragePrices);
+
 // @route   Get api/prices/processors
 // @desc    get prices of processors
 // @access  Public

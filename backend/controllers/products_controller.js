@@ -30,7 +30,7 @@ exports.getProductsById = (req, res, next) => {
       res.json(product);
     })
     .catch(err =>
-      res.status(404).json({ product: "There is no product for this id" })
+      res.status(500).json({ product: "There is no product for this id" })
     );
 };
 
@@ -53,7 +53,7 @@ exports.getRelatedProduct = (req, res, next) => {
       res.json({ products });
     })
     .catch(err =>
-      res.status(404).json({ product: "There is no product for this brand" })
+      res.status(500).json({ product: "There is no product for this brand" })
     );
 };
 
@@ -67,6 +67,72 @@ exports.getProductByName = (req, res, next) => {
     .catch(err =>
       res.status(404).json({ product: "There is no product for this name" })
     );
+};
+
+// exports.getProductsByMemory = (req, res, next) => {
+//   const errors = {};
+//   const page = req.query.page;
+//   const limit = req.query.limit;
+//   const regex = `^${req.params.memory}$`;
+
+//   Product.paginate({}, { page: page, limit: limit }, function(err, products) {
+//     if (!products) {
+//       errors.noproduct = "There are no products";
+//       return res.status(404).json(errors);
+//     }
+//     const filteredProducts = price[itemKey].filter(
+//       product => product.memory == { $regex: req.params.memory, $options: "i" }
+//     );
+//     if (filteredProducts.length === 0) {
+//       return res.status(404).json({ processornotfound: "No item found" });
+//     } else {
+//       return res.json({ processor: filteredProducts[0] });
+//     }
+//   }).catch(err =>
+//     res.status(404).json({ product: "There is no product for this memory" })
+//   );
+// };
+
+//memory: { $regex: req.params.memory, $options: "i" }
+
+// // Get processors price
+// exports.getProductsByMemory = (req, res) => {
+//   Product.find()
+//     .lean()
+//     .then(price => {
+//       console.log(req.query.memory);
+//       const memory = req.query;
+//       const filteredProcessors = price[itemKey].filter(
+//         processor => processor.memory === memory
+//       );
+//       if (filteredProcessors.length === 0) {
+//         return res.status(404).json({ processornotfound: "No item found" });
+//       } else {
+//         return res.json({ processor: filteredProcessors });
+//       }
+//     })
+//     .catch(err => res.status(500).json(err));
+// };
+
+exports.getProductsByCategory = (req, res, next) => {
+  const errors = {};
+  const page = req.query.page;
+  const limit = req.query.limit;
+  Product.paginate(
+    { category: req.params.category },
+    {
+      page: page,
+      limit: limit
+    }
+  )
+    .then(products => {
+      if (!products) {
+        errors.noproduct = "There is no product for this category";
+        res.status(404).json(errors);
+      }
+      res.json({ products });
+    })
+    .catch(err => res.status(500).json(err));
 };
 
 exports.filterProducts = (req, res) => {
