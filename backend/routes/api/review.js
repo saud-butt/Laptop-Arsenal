@@ -19,6 +19,10 @@ router.get("/:id", ReviewController.getReview);
 // @access  Public
 router.get("/user/:id", ReviewController.getReviewByUserId);
 
+// Get review by name
+// GET /api/reviews/name/:reviewName
+router.get("/name/:name", ReviewController.getReviewByName);
+
 // @route   GET api/reviews/:product_id
 // @desc    Get review by product_id
 // @access  Public

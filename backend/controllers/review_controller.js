@@ -59,6 +59,18 @@ exports.getReviewByProductId = (req, res) => {
     );
 };
 
+exports.getReviewByName = (req, res, next) => {
+  const regex = `^${req.params.name}$`;
+  Review.find({ name: { $regex: req.params.name, $options: "i" } })
+    .limit(15)
+    .then(reviews => {
+      res.json(reviews);
+    })
+    .catch(err =>
+      res.status(404).json({ review: "There is no review for this name" })
+    );
+};
+
 // Create a review
 exports.createReview = (req, res) => {
   const { errors, isValid } = validateReviewInput(req.body);

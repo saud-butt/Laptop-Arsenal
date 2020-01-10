@@ -68,7 +68,7 @@ const reviewSchema = new Schema({
 reviewSchema.plugin(mongoosePaginate);
 
 reviewSchema.index({
-  name: "Review text"
+  name: "text"
 });
 
 reviewSchema.plugin(aggregatePaginate);
